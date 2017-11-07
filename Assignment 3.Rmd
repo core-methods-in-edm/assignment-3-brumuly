@@ -56,8 +56,10 @@ Cluster one starts with high motivation, but falls in week 3. Cluster 2 motivati
 
 You can also embed plots, for example:
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+```
+```
+```{r}
+CS1 <- read.csv("HUDK4050_2017_Cluster_Survey.csv", sep = ",", header = TRUE)
 ```
 
 Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
