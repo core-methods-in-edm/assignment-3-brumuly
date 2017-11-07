@@ -1,0 +1,65 @@
+---
+title: "Assignment 3"
+author: "Blake Rumuly"
+date: "October 24, 2017"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+install.packages("ggplot2")
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+K1 <- read.table("Class_Motivation.csv", sep = ",", header = TRUE)
+K2 <- dplyr::select(K1, 2:6)
+K3 <- na.omit(K2)
+K3 <- scale(K3)
+fit <- kmeans(K3, 2) 
+fit$cluster
+K4 <- data.frame(K3, fit$cluster)
+names(K4) <- c("1", "2", "3", "4", "5", "cluster")
+K5 <- tidyr::gather(K4, "week", "motivation", 1:5)
+K6 <- K5 %>% group_by(week, cluster)
+K6 <- summarise(K6, avg = mean(motivation))
+K6$week <- as.numeric(K6$week)
+K6$cluster <- as.factor(K6$cluster)
+ggplot(K6, aes(week, avg, colour = cluster)) + geom_line() + xlab("Week") + ylab("Average Motivation")
+K7 <- dplyr::count(K4, cluster)
+```
+What patterns do you see in the plot?
+The clusters are inverse. Cluster one remains high motivation until week 3 which is when cluster two starts to rise
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r}
+fit <- kmeans(K3, 3) 
+K41 <- data.frame(K3, fit$cluster)
+names(K41) <- c("1", "2", "3", "4", "5", "cluster")
+K51 <- tidyr::gather(K41, "week", "motivation", 1:5)
+K61 <- K51 %>% group_by(week, cluster)
+K61 <- summarise(K61, avg = mean(motivation))
+K61$week <- as.numeric(K61$week)
+K61$cluster <- as.factor(K61$cluster)
+ ggplot(K61, aes(week, avg, colour = cluster)) + geom_line() + xlab("Week") + ylab("Average Motivation")
+```
+What patterns do you see in the plot?
+Cluster one starts with high motivation, but falls in week 3. Cluster 2 motivation rises and falls every other week. Cluster 3 rises in week 2, falls the following week, and then rises before it plateaus.
+
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```
+```
+```{r}
+CS1 <- read.csv("HUDK4050_2017_Cluster_Survey.csv", sep = ",", header = TRUE)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
